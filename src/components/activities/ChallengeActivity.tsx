@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-import Phaser from "phaser";
-import { ChallengeScene, type ChallengeResult } from "../../game/ChallengeScene";
+import type { ChallengeResult } from "../../game/ChallengeScene";
 import type { LessonItem } from "../../types/lesson";
 import { recordAttempt } from "../../data/db";
 
@@ -17,23 +16,38 @@ export default function ChallengeActivity({ item, allItems, sessionId, onComplet
   useEffect(() => {
     if (!containerRef.current) return;
 
+    let cancelled = false;
+    let game: import("phaser").Game | undefined;
+
     async function handleFinish(result: ChallengeResult) {
       const wasCorrect = result.correctCollected > result.wrongCollected;
       await recordAttempt(item.id, "challenge", wasCorrect, sessionId);
       onComplete(wasCorrect);
     }
 
-    const game = new Phaser.Game({
-      type: Phaser.AUTO,
-      width: 800,
-      height: 480,
-      parent: containerRef.current,
-      scene: [ChallengeScene],
-    });
+    (async () => {
+      const [{ default: Phaser }, { ChallengeScene }] = await Promise.all([
+        import("phaser"),
+        import("../../game/ChallengeScene"),
+      ]);
 
-    game.scene.start("ChallengeScene", { target: item, pool: allItems, onFinish: handleFinish });
+      if (cancelled || !containerRef.current) return;
 
-    return () => game.destroy(true);
+      game = new Phaser.Game({
+        type: Phaser.AUTO,
+        width: 800,
+        height: 480,
+        parent: containerRef.current,
+        scene: [ChallengeScene],
+      });
+
+      game.scene.start("ChallengeScene", { target: item, pool: allItems, onFinish: handleFinish });
+    })();
+
+    return () => {
+      cancelled = true;
+      game?.destroy(true);
+    };
   }, [item, allItems, sessionId, onComplete]);
 
   return <div ref={containerRef} data-testid="challenge-canvas-host" />;

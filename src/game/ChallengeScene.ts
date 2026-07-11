@@ -1,9 +1,8 @@
 import Phaser from "phaser";
 import type { LessonItem } from "../types/lesson";
+import { scoreCollectible } from "./scoreCollectible";
 
-export function scoreCollectible(targetId: string, collectedId: string): boolean {
-  return targetId === collectedId;
-}
+export { scoreCollectible } from "./scoreCollectible";
 
 export interface ChallengeResult {
   correctCollected: number;
