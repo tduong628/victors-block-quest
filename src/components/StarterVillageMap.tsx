@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { LessonPack, MasteryRecord, LessonItem, MasteryStatus } from "../types/lesson";
 import { getAllMastery } from "../data/db";
-import { getDropSnapVariant, getSnapSoft } from "../lib/animation";
+import { getDropSnapVariant, getHoverLift, getPressTap, getSnapSoft } from "../lib/animation";
 import { NODE_LAYOUT, HOME_POSITION, ZONE_GATEWAYS, buildTrailPath } from "../data/villageLayout";
 import VoxelTile from "./VoxelTile";
 import StatusRing from "./StatusRing";
@@ -142,8 +142,8 @@ export default function StarterVillageMap({ pack, sessionId }: StarterVillageMap
               initial={drop.initial}
               animate={drop.animate}
               transition={{ ...drop.transition, delay: index * 0.05 }}
-              whileTap={{ scale: 0.94 }}
-              whileHover={{ y: -3 }}
+              whileTap={getPressTap()}
+              whileHover={getHoverLift()}
             >
               <VoxelTile
                 interactive={false}

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import type { LessonItem } from "../../types/lesson";
 import { starterVillagePack } from "../../data/lessonPacks/starter-village";
 import { recordAttempt } from "../../data/db";
-import { getPressTap, getSnapSpring, getWrongAnswerCue, prefersReducedMotion } from "../../lib/animation";
+import { getHoverLift, getPressTap, getSnapSpring, getWrongAnswerCue, prefersReducedMotion } from "../../lib/animation";
 import VoxelTile from "../VoxelTile";
 
 export interface MatchItActivityProps {
@@ -13,9 +13,6 @@ export interface MatchItActivityProps {
 }
 
 type Feedback = { choice: string; kind: "correct" | "wrong" } | null;
-
-const CORRECT_ADVANCE_MS = 420;
-const WRONG_ADVANCE_MS = 260;
 
 interface MatchChoiceTileProps {
   choice: string;
@@ -48,7 +45,7 @@ function MatchChoiceTile({ choice, feedback, onTap }: MatchChoiceTileProps) {
       type="button"
       onClick={onTap}
       whileTap={getPressTap()}
-      whileHover={{ y: -2 }}
+      whileHover={getHoverLift()}
       animate={animate}
       transition={transition}
       className={`relative rounded-block ${isFlash ? "ring-4 ring-terracotta-600" : ""}`}
@@ -82,10 +79,11 @@ export default function MatchItActivity({ item, sessionId, onComplete }: MatchIt
 
   async function handleChoice(choice: string) {
     const correct = choice === correctChoice;
+    // Visual-only: drives the dock/shake cue on the tapped tile. onComplete fires
+    // immediately after recordAttempt resolves, exactly as before this restyle.
     setFeedback({ choice, kind: correct ? "correct" : "wrong" });
     await recordAttempt(item.id, "match_it", correct, sessionId);
-    const delay = prefersReducedMotion() ? 0 : correct ? CORRECT_ADVANCE_MS : WRONG_ADVANCE_MS;
-    setTimeout(() => onComplete(correct), delay);
+    onComplete(correct);
   }
 
   return (

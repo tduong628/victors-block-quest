@@ -5,6 +5,8 @@ export const snapSpring: Transition = { type: "spring", stiffness: 320, damping:
 export const snapSoft: Transition = { type: "spring", stiffness: 260, damping: 26, mass: 1.0 };
 export const brickPop: Transition = { type: "spring", stiffness: 400, damping: 18, mass: 0.7 };
 export const pressTap = { scale: 0.94 } as const;
+// DESIGN_SPEC.md §5.6 — "whileHover={{ y: -2 }} lift on pointer devices" for every button.
+export const hoverLift = { y: -2 } as const;
 
 export const reducedCrossFade: Transition = { duration: 0.12, ease: "linear" };
 export const reducedTap = {} as const;
@@ -39,6 +41,12 @@ export function getBrickPop(): Transition {
 
 export function getPressTap(): typeof pressTap | typeof reducedTap {
   return prefersReducedMotion() ? reducedTap : pressTap;
+}
+
+// DESIGN_SPEC.md §9 — reduced motion must kill translate/scale entirely, including the
+// pointer-hover lift, not just spring overshoot.
+export function getHoverLift(): typeof hoverLift | typeof reducedTap {
+  return prefersReducedMotion() ? reducedTap : hoverLift;
 }
 
 // Swapping only the `transition` timing is not enough: under reduced motion, DESIGN_SPEC.md §9

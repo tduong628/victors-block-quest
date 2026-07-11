@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { motion } from "framer-motion";
-import { getPressTap } from "../lib/animation";
+import { getHoverLift, getPressTap } from "../lib/animation";
 
 export interface VoxelTileProps {
   /** Symbol rendered on the upright top-face plate. Prefer this over `children` for the
@@ -88,7 +88,7 @@ export default function VoxelTile({
       onClick={onClick}
       disabled={disabled}
       whileTap={getPressTap()}
-      whileHover={{ y: -2 }}
+      whileHover={getHoverLift()}
       {...rest}
     >
       {faces}

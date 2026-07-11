@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { LessonItem } from "../../types/lesson";
 import { saveArtwork } from "../../data/artwork";
-import { getBrickPop, getPressTap, getSnapSpring, prefersReducedMotion } from "../../lib/animation";
+import { getBrickPop, getHoverLift, getPressTap, getSnapSpring, prefersReducedMotion } from "../../lib/animation";
 
 export interface CreateItActivityProps {
   item: LessonItem;
@@ -10,7 +10,6 @@ export interface CreateItActivityProps {
 }
 
 const PALETTE = ["#f87171", "#fbbf24", "#34d399", "#38bdf8", "#a78bfa", "#f472b6"];
-const COLLECT_DELAY_MS = 420;
 
 function CheckGlyph() {
   return (
@@ -55,9 +54,10 @@ export default function CreateItActivity({ item, onComplete }: CreateItActivityP
       dataUrl = "";
     }
     await saveArtwork(item.id, dataUrl);
+    // Visual-only: drives the shrink-to-corner collectible cue. onComplete fires
+    // immediately after saveArtwork resolves, exactly as before this restyle.
     setCollecting(true);
-    const delay = prefersReducedMotion() ? 0 : COLLECT_DELAY_MS;
-    setTimeout(onComplete, delay);
+    onComplete();
   }
 
   const reduced = prefersReducedMotion();
@@ -126,7 +126,7 @@ export default function CreateItActivity({ item, onComplete }: CreateItActivityP
       <motion.button
         onClick={handleSave}
         whileTap={getPressTap()}
-        whileHover={{ y: -2 }}
+        whileHover={getHoverLift()}
         className="min-h-[56px] rounded-pill bg-teal-pine-500 px-8 py-4 font-ui text-lg font-semibold text-surface shadow-md"
       >
         Save to Collection

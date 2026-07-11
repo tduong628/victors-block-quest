@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import type { LessonItem } from "../../types/lesson";
 import { pickDistractors } from "../../data/pickDistractors";
 import { recordAttempt } from "../../data/db";
-import { getBrickPop, getPressTap, getWrongAnswerCue, prefersReducedMotion } from "../../lib/animation";
+import { getBrickPop, getHoverLift, getPressTap, getWrongAnswerCue, prefersReducedMotion } from "../../lib/animation";
 import VoxelTile from "../VoxelTile";
 
 export interface FindItActivityProps {
@@ -14,9 +14,6 @@ export interface FindItActivityProps {
 }
 
 type Feedback = { choiceId: string; kind: "correct" | "wrong" } | null;
-
-const CORRECT_ADVANCE_MS = 380;
-const WRONG_ADVANCE_MS = 260;
 
 function BrickBurst() {
   const brick = getBrickPop();
@@ -71,7 +68,7 @@ function ChoiceTile({ choice, feedback, onTap }: ChoiceTileProps) {
       type="button"
       onClick={onTap}
       whileTap={getPressTap()}
-      whileHover={{ y: -2 }}
+      whileHover={getHoverLift()}
       animate={animate}
       transition={transition}
       className={`relative rounded-block ${isFlash ? "ring-4 ring-terracotta-600" : ""}`}
@@ -104,10 +101,12 @@ export default function FindItActivity({ item, allItems, sessionId, onComplete }
 
   async function handleChoice(choiceId: string) {
     const correct = choiceId === item.id;
+    // Visual-only: drives the brickPop/shake cue on the tapped tile. onComplete fires
+    // immediately after recordAttempt resolves, exactly as before this restyle — no
+    // artificial delay was introduced into the onComplete(wasCorrect) callback timing.
     setFeedback({ choiceId, kind: correct ? "correct" : "wrong" });
     await recordAttempt(item.id, "find_it", correct, sessionId);
-    const delay = prefersReducedMotion() ? 0 : correct ? CORRECT_ADVANCE_MS : WRONG_ADVANCE_MS;
-    setTimeout(() => onComplete(correct), delay);
+    onComplete(correct);
   }
 
   if (!choices) return <div className="flex h-full items-center justify-center text-ink-mute">Loading…</div>;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { LessonItem } from "../../types/lesson";
 import { getItemAudio, playSequential } from "../../audio/manifest";
-import { getScaleInVariant, getPressTap } from "../../lib/animation";
+import { getScaleInVariant, getPressTap, getHoverLift } from "../../lib/animation";
 
 export interface DiscoverActivityProps {
   item: LessonItem;
@@ -64,7 +64,7 @@ export default function DiscoverActivity({ item, onComplete }: DiscoverActivityP
       <motion.button
         onClick={onComplete}
         whileTap={getPressTap()}
-        whileHover={{ y: -2 }}
+        whileHover={getHoverLift()}
         className="relative min-h-[56px] rounded-pill bg-teal-pine-500 px-10 py-4 font-ui text-lg font-semibold text-surface shadow-md"
       >
         Continue
