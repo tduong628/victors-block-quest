@@ -23,6 +23,28 @@ describe("StarterVillageMap", () => {
     expect(screen.getByTestId("village-node-letter-A")).toHaveTextContent(/mastered/i);
   });
 
+  // Regression for the visual bug found via live browser inspection: the DOM-assertion tests
+  // above pass even when every node is rendered with opacity: 0 (present, correctly labelled,
+  // and clickable, but visually invisible), because they never look at computed style. Framer
+  // Motion drives its spring animations by writing directly to each element's inline `style`
+  // (not real CSS @keyframes), so jsdom + real timers CAN observe the resolved opacity here —
+  // this asserts on that inline style rather than trusting DOM presence/text alone.
+  it("animates every node's opacity to 1 after the drop-and-snap entrance settles", async () => {
+    const { container } = render(<StarterVillageMap pack={starterVillagePack} sessionId="s1" />);
+    await screen.findAllByTestId(/^village-node-/);
+
+    await waitFor(
+      () => {
+        const nodes = container.querySelectorAll('[data-testid^="village-node-"]');
+        expect(nodes).toHaveLength(10);
+        nodes.forEach((node) => {
+          expect(getComputedStyle(node).opacity).toBe("1");
+        });
+      },
+      { timeout: 2000, interval: 50 }
+    );
+  });
+
   it("opens LessonRunner on tap and returns to the map after lesson completion", async () => {
     render(<StarterVillageMap pack={starterVillagePack} sessionId="s1" />);
     await waitFor(() => screen.getAllByTestId(/^village-node-/));

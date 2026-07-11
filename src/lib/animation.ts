@@ -4,6 +4,14 @@ import type { Target, TargetAndTransition, Transition } from "framer-motion";
 export const snapSpring: Transition = { type: "spring", stiffness: 320, damping: 24, mass: 0.9 };
 export const snapSoft: Transition = { type: "spring", stiffness: 260, damping: 26, mass: 1.0 };
 export const brickPop: Transition = { type: "spring", stiffness: 400, damping: 18, mass: 0.7 };
+// Tuned specifically for the village map's simultaneous ~10-node staggered entrance.
+// snapSpring's ~24 damping / 0.9 mass settles in ~700-900ms per node; stacked behind a
+// per-node stagger delay that scales with list length, that produced a multi-second window
+// where most nodes sat at opacity 0 (invisible but clickable) before ever starting to move —
+// easy to mistake for a stuck animation on a quick glance or an early snapshot. This spring
+// converges in well under half that time so the whole map is fully visible fast, while still
+// keeping the drop-and-snap character (see getDropSnapVariant + STAGGER_STEP_SEC below).
+export const mapEntrySpring: Transition = { type: "spring", stiffness: 420, damping: 32, mass: 0.55 };
 export const pressTap = { scale: 0.94 } as const;
 // DESIGN_SPEC.md §5.6 — "whileHover={{ y: -2 }} lift on pointer devices" for every button.
 export const hoverLift = { y: -2 } as const;
@@ -69,8 +77,21 @@ export function getDropSnapVariant(): MotionVariant {
   return buildVariant(prefersReducedMotion(), {
     initial: { y: -24, opacity: 0 },
     animate: { y: 0, opacity: 1 },
-    transition: snapSpring,
+    transition: mapEntrySpring,
   });
+}
+
+// Per-node stagger step for the village map's drop-and-snap entrance, plus a hard cap on how
+// many steps of delay accumulate. Multiplying `index * STAGGER_STEP_SEC` directly (uncapped)
+// meant every additional item in a lesson pack pushed the last node's start time further out
+// with no ceiling — a pack with more items than today's 10 would only make the "everything is
+// invisible" window worse. Capping the delay keeps the stagger *feel* (later nodes still drop
+// in slightly after earlier ones) without letting total entrance time scale with list length.
+export const STAGGER_STEP_SEC = 0.03;
+const MAX_STAGGER_STEPS = 6;
+
+export function getStaggerDelay(index: number): number {
+  return Math.min(index, MAX_STAGGER_STEPS) * STAGGER_STEP_SEC;
 }
 
 // Discover giant symbol snapping to full size (DESIGN_SPEC.md §5.2).

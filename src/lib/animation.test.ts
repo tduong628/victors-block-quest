@@ -8,7 +8,9 @@ import {
   getScaleInVariant,
   getSnapSoft,
   getSnapSpring,
+  getStaggerDelay,
   getWrongAnswerCue,
+  mapEntrySpring,
   pressTap,
   prefersReducedMotion,
   reducedCrossFade,
@@ -82,7 +84,7 @@ describe("signature-moment motion variants", () => {
     expect(getDropSnapVariant()).toEqual({
       initial: { y: -24, opacity: 0 },
       animate: { y: 0, opacity: 1 },
-      transition: snapSpring,
+      transition: mapEntrySpring,
     });
     expect(getScaleInVariant()).toEqual({
       initial: { scale: 0.85, opacity: 0 },
@@ -106,6 +108,26 @@ describe("signature-moment motion variants", () => {
         transition: reducedCrossFade,
       });
     }
+  });
+});
+
+describe("getStaggerDelay", () => {
+  it("increases linearly for the first few nodes", () => {
+    expect(getStaggerDelay(0)).toBe(0);
+    expect(getStaggerDelay(1)).toBeCloseTo(0.03);
+    expect(getStaggerDelay(2)).toBeCloseTo(0.06);
+  });
+
+  // Regression: the village map's entrance previously multiplied `index * 0.05` with no
+  // ceiling, so every extra item in a lesson pack pushed the last node's start time further
+  // out and widened the window where most of the map sits at opacity 0. This asserts the
+  // delay is bounded regardless of how large `index` gets, so a bigger pack can never make
+  // the invisible window longer than today's 10-item map does.
+  it("caps the delay so it does not grow unbounded for large indexes", () => {
+    const cappedAtSix = getStaggerDelay(6);
+    expect(getStaggerDelay(9)).toBe(cappedAtSix);
+    expect(getStaggerDelay(50)).toBe(cappedAtSix);
+    expect(getStaggerDelay(1000)).toBe(cappedAtSix);
   });
 });
 
