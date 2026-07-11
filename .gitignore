@@ -25,3 +25,9 @@ dist-ssr
 
 # AppleDouble shadow files (this volume is exFAT/non-native; macOS stores xattrs as ._* siblings)
 ._*
+
+# Playwright artifacts
+test-results
+playwright-report
+blob-report
+playwright/.cache
