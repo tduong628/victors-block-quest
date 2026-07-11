@@ -1,5 +1,7 @@
 @import "./styles/tokens.css";
 @import "./styles/fonts.css";
+@import "./styles/voxel.css";
+@import "./styles/village.css";
 
 @tailwind base;
 @tailwind components;

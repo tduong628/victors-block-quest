@@ -1,0 +1,86 @@
+/* Voxel 3D block language (DESIGN_SPEC.md §6).
+   Layered clip-path cube: three flat parallelogram/rhombus faces built from a single
+   square box via clip-path, so every face is a flat 2D paint layer with zero 3D
+   transform. The symbol plate (.voxel-tile__content) is a plain, non-transformed
+   layer on top — it is never subject to a skew/rotation, which is the load-bearing
+   guarantee behind DESIGN_SPEC.md's "glyphs must render upright" rule. */
+
+.voxel-tile {
+  --voxel-base: var(--tc-400);
+  --voxel-size: 96px;
+  position: relative;
+  display: block;
+  width: var(--voxel-size);
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  filter: drop-shadow(var(--voxel-drop));
+}
+
+.voxel-tile--static {
+  cursor: default;
+}
+
+.voxel-tile__face {
+  position: absolute;
+  inset: 0;
+}
+
+.voxel-tile__face--top {
+  clip-path: polygon(50% 0%, 100% 25%, 50% 50%, 0% 25%);
+  background: color-mix(in srgb, var(--voxel-base) calc(100% - 18%), white 18%);
+}
+
+.voxel-tile__face--left {
+  clip-path: polygon(0% 25%, 50% 50%, 50% 100%, 0% 75%);
+  background: var(--voxel-base);
+  overflow: hidden;
+}
+
+.voxel-tile__face--right {
+  clip-path: polygon(50% 50%, 100% 25%, 100% 75%, 50% 100%);
+  background: color-mix(in srgb, var(--voxel-base) calc(100% - 16%), black 16%);
+}
+
+.voxel-tile__fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--tp-500);
+}
+
+.voxel-tile__edges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow: inset 0 0 0 1.5px var(--voxel-edge);
+  border-radius: 2px;
+}
+
+.voxel-tile__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* :focus-visible box-shadow halo comes from the global rule in tokens.css — the button
+   itself carries no clip-path, so the rectangular halo+ring renders normally around the
+   full hexagonal cube, satisfying DESIGN_SPEC.md §9's focus-visible requirement. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .voxel-tile {
+    transition: transform var(--dur-fast) var(--ease-snap);
+  }
+}

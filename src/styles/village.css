@@ -1,0 +1,64 @@
+/* Isometric Village Path layout (DESIGN_SPEC.md §4) — a positioned serpentine trail, not
+   a uniform grid. Desktop/tablet (>=768px): nodes are absolutely positioned by % along the
+   trail behind an SVG path. Portrait fallback (<768px): the same DOM nodes collapse into a
+   single full-width vertical stack (no duplicate elements — this keeps `village-node-*`
+   testids and click handlers identical at every breakpoint). */
+
+.village-map {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  aspect-ratio: 16 / 10;
+  min-height: 420px;
+}
+
+.village-trail-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.village-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: none;
+  padding: var(--space-2);
+  cursor: pointer;
+}
+
+.village-gateway {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  opacity: 0.55;
+}
+
+@media (max-width: 767px) {
+  .village-map {
+    aspect-ratio: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-6);
+  }
+
+  .village-trail-svg,
+  .village-gateway {
+    display: none;
+  }
+
+  .village-node {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100%;
+    flex-direction: row !important;
+    justify-content: flex-start;
+    gap: var(--space-4) !important;
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid var(--surface-line);
+  }
+}
