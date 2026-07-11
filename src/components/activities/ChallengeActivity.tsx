@@ -26,7 +26,7 @@ export default function ChallengeActivity({ item, allItems, sessionId, onComplet
     let game: import("phaser").Game | undefined;
 
     async function handleFinish(result: ChallengeResult) {
-      const wasCorrect = result.correctCollected > result.wrongCollected;
+      const wasCorrect = result.wasCorrect ?? result.correctCollected > result.wrongCollected;
       await recordAttempt(item.id, "challenge", wasCorrect, sessionId);
       onComplete(wasCorrect);
     }
