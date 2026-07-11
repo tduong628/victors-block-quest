@@ -65,7 +65,7 @@ export default function VoxelTile({
       </span>
       <span className="voxel-tile__face voxel-tile__face--top" aria-hidden="true" />
       <span className="voxel-tile__edges" aria-hidden="true" />
-      <span className={`voxel-tile__content font-symbol text-ink ${symbolClassName}`}>
+      <span className={`voxel-tile__content font-symbol font-bold leading-none text-ink ${symbolClassName}`}>
         {symbol}
       </span>
       {children}
