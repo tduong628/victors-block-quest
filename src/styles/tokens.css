@@ -1,0 +1,124 @@
+:root {
+  /* ---- Storybook Dusk — brand scales ---- */
+  /* Terracotta (primary) */
+  --tc-50:  #FBEEEA;
+  --tc-100: #F6D9CF;
+  --tc-200: #EFBBAB;
+  --tc-300: #E89C86;
+  --tc-400: #E48A70;
+  --tc-500: #E07A5F;  /* base */
+  --tc-600: #C55E44;
+  --tc-700: #A24732;  /* text-safe on cream */
+  --tc-800: #7D3626;
+  --tc-900: #5A271B;
+
+  /* Teal-pine (secondary) */
+  --tp-50:  #E9F2F0;
+  --tp-100: #C9E0DB;
+  --tp-200: #9CC7BF;
+  --tp-300: #6BA99E;
+  --tp-400: #4E9689;
+  --tp-500: #3D8577;  /* base */
+  --tp-600: #316B60;
+  --tp-700: #27544C;  /* text-safe on cream */
+  --tp-800: #1F423B;
+  --tp-900: #16302B;
+
+  /* Butter (accent) */
+  --bt-50:  #FEF9EA;
+  --bt-100: #FCEFC3;
+  --bt-200: #F9E294;
+  --bt-300: #F5D66B;
+  --bt-400: #F2CC5B;  /* base — accent fill only */
+  --bt-500: #E6B733;
+  --bt-600: #C8991E;
+  --bt-700: #9E7717;  /* text-safe on cream */
+  --bt-800: #6E5310;
+
+  /* ---- Kid surface (cream paper) ---- */
+  --surface:        #FBF3E4;  /* app background */
+  --surface-raised: #FFFBF2;  /* cards / tiles top */
+  --surface-sunken: #F3E8D3;  /* insets / canvas frame */
+  --surface-line:   #E7D8BE;  /* hairline borders */
+
+  /* ---- Ink (text on cream) ---- */
+  --ink:      #3A2E28;  /* primary text / symbols — 11.89:1 on cream (AAA) */
+  --ink-soft: #5C4B42;  /* secondary text */
+  --ink-mute: #6F5C51;  /* tertiary labels */
+
+  /* ---- Text-safe brand -ink tokens (VERIFIED — use these, not raw brand, for ANY text/small icon) ---- */
+  --terracotta-ink: #C1502F;  /* white text on this fill: 4.71:1 PASS. Raw --tc-500 has NO compliant text pairing — fill-only. */
+  --teal-ink:       #2E6B5E;  /* text on cream: 5.63:1 · white on this fill: 6.21:1. Raw --tp-500 is large/UI-only. */
+  --teal-ink-deep:  #245349;  /* 7.91:1 on cream (AAA) — parent dashboard extra margin */
+
+  /* ---- Mastery status (VERIFIED on BOTH cream + parent off-white, CVD-safe — always pair with a shape/glyph, never color alone) ---- */
+  --status-new:        #4B5563;  /* slate — 6.85:1 cream · outline-only ring */
+  --status-practicing: #B45309;  /* amber-700 — 4.55:1 cream · half-filled ring */
+  --status-nearly:     #2E6B5E;  /* teal-ink — 5.63:1 cream · three-quarter ring */
+  --status-mastered:   #15803D;  /* green-700 — 4.55:1 cream · filled ring + check/star glyph */
+
+  /* ---- Parent "Clean Data Room" — distinct neutral skin ---- */
+  --pd-bg:      #FAFAF9;  /* off-white desk (verified against status colors) */
+  --pd-panel:   #FFFFFF;
+  --pd-line:    #E6E4DE;
+  --pd-ink:     #1C1B19;  /* near-black */
+  --pd-ink-soft:#55534E;
+  --pd-accent:  #27544C;  /* teal-pine 700, the ONE restrained data accent */
+
+  /* ---- Voxel face shading (applied to any block's base hue) ---- */
+  --voxel-top-lighten:  18%;  /* top face   */
+  --voxel-side-darken:  16%;  /* right face  */
+  --voxel-edge:         rgba(58, 46, 40, 0.16); /* cube seam line */
+  --voxel-drop:         0 14px 0 -6px rgba(58, 46, 40, 0.18); /* grounded block shadow */
+
+  /* ---- Focus (VERIFIED — halo+ring combo; single-accent rings failed 3:1 on the brand fills) ---- */
+  /* kid surface:   box-shadow: 0 0 0 2px var(--surface), 0 0 0 5px var(--ink);   */
+  /* parent surface: box-shadow: 0 0 0 2px var(--pd-bg),   0 0 0 5px var(--ink);  */
+  --focus-inner: var(--surface);   /* inner spacer ring = the surface color */
+  --focus-outer: var(--ink);       /* outer 3px ring = cocoa ink, reads on every brand color */
+
+  /* ---- Type scale — Major Third 1.250, 16px root ---- */
+  --text-xs:   0.64rem;
+  --text-sm:   0.8rem;
+  --text-base: 1rem;
+  --text-lg:   1.25rem;
+  --text-xl:   1.563rem;
+  --text-2xl:  1.953rem;
+  --text-3xl:  2.441rem;
+  /* fluid hero steps (tablet-first) */
+  --symbol-map:     clamp(2.5rem, 1rem + 6vw, 5rem);    /* map node symbol */
+  --symbol-choice:  clamp(3rem, 1.5rem + 6vw, 5.5rem);  /* find-it / match-it choices */
+  --symbol-hero:    clamp(8rem, 4rem + 20vw, 18rem);    /* Discover giant symbol */
+
+  /* ---- Spacing — 4px base ---- */
+  --space-1: 0.25rem; --space-2: 0.5rem;  --space-3: 0.75rem; --space-4: 1rem;
+  --space-6: 1.5rem;  --space-8: 2rem;    --space-12: 3rem;   --space-16: 4rem;
+  --space-24: 6rem;
+  --safe-area: clamp(1.5rem, 3vw, 3rem);   /* map / screen padding */
+
+  /* ---- Radii — chunky, block-consistent ---- */
+  --radius-block: 18px;   /* voxel tiles / big buttons */
+  --radius-card:  14px;
+  --radius-pill:  999px;
+  --radius-pd:    8px;     /* data room = tighter, more adult */
+
+  /* ---- Motion (see src/lib/animation.ts for Framer presets) ---- */
+  --ease-snap: cubic-bezier(0.34, 1.30, 0.64, 1);  /* slight overshoot "snap" */
+  --ease-crisp: cubic-bezier(0.20, 0, 0, 1);
+  --dur-fast: 140ms;
+  --dur-normal: 240ms;
+
+  /* ---- Fonts (see src/styles/fonts.css) ---- */
+  --font-symbol: "Andika", sans-serif;
+  --font-ui: "Lexend", sans-serif;
+}
+
+/* ---- Focus-visible (halo+ring — VERIFIED, apply identically everywhere) ---- */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--focus-inner), 0 0 0 5px var(--focus-outer);
+}
+
+[data-surface="parent"] :focus-visible {
+  box-shadow: 0 0 0 2px var(--pd-bg), 0 0 0 5px var(--focus-outer);
+}
