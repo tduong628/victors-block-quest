@@ -21,9 +21,20 @@ export function playSequential(clips: AudioClip[]): Promise<void> {
   );
 }
 
+// Lesson content stores audio paths as root-absolute strings (e.g. "/audio/en_letter-A.mp3")
+// so they stay independent of any single deploy target. Vite's asset pipeline never touches
+// plain runtime strings like this — only imported/HTML/CSS-referenced assets get base-path
+// rewriting — so every playback call must resolve against import.meta.env.BASE_URL itself
+// ("/" in dev, "/victors-block-quest/" in the GitHub Pages build) or the path 404s off-origin
+// once deployed under a sub-path.
+function withBase(rootAbsolutePath: string): string {
+  const base = import.meta.env.BASE_URL;
+  return `${base}${rootAbsolutePath.replace(/^\//, "")}`;
+}
+
 function playOne(clip: AudioClip): Promise<void> {
   return new Promise((resolve) => {
-    const audio = new Audio(clip.src);
+    const audio = new Audio(withBase(clip.src));
     audio.onended = () => resolve();
     audio.onerror = () => resolve(); // missing/broken clip must never block the lesson — fail silent, not fail loud
     audio.play().catch(() => resolve());

@@ -42,4 +42,21 @@ describe("playSequential", () => {
     }));
     await expect(playSequential([{ src: "/audio/en_missing.mp3" }])).resolves.toBeUndefined();
   });
+
+  it("prefixes root-absolute clip paths with import.meta.env.BASE_URL so audio resolves under a sub-path deploy (e.g. GitHub Pages)", async () => {
+    const AudioSpy = vi.fn().mockImplementation(() => {
+      const instance: any = { play: vi.fn().mockResolvedValue(undefined), onended: null, onerror: null };
+      queueMicrotask(() => instance.onended && instance.onended());
+      return instance;
+    });
+    vi.stubGlobal("Audio", AudioSpy);
+
+    await playSequential([{ src: "/audio/en_letter-A.mp3" }]);
+
+    const expectedSrc = `${import.meta.env.BASE_URL}audio/en_letter-A.mp3`;
+    expect(AudioSpy).toHaveBeenCalledWith(expectedSrc);
+    // Guard against the exact bug this test was written for: the raw root-absolute
+    // path must never reach the Audio constructor unprefixed once a base path is configured.
+    expect(AudioSpy).not.toHaveBeenCalledWith("/audio/en_letter-A.mp3");
+  });
 });
