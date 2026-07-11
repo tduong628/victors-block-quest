@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Victor's Block Quest app icon — a single voxel cube with the letter A</title>
+  <rect x="0" y="0" width="512" height="512" fill="#FBF3E4" />
+
+  <ellipse cx="256" cy="430" rx="112" ry="18" fill="#3A2E28" opacity="0.14" />
+
+  <g stroke="#3A2E28" stroke-opacity="0.16" stroke-width="2" stroke-linejoin="round">
+    <polygon points="126.1,191 256,116 385.9,191 256,266" fill="#E99F8A" />
+    <polygon points="385.9,191 385.9,341 256,416 256,266" fill="#C0745E" />
+    <polygon points="256,416 126.1,341 126.1,191 256,266" fill="#E48A70" />
+  </g>
+
+  <text
+    x="256"
+    y="222"
+    text-anchor="middle"
+    font-family="Andika, Arial, Helvetica, sans-serif"
+    font-weight="700"
+    font-size="118"
+    fill="#3A2E28"
+  >A</text>
+</svg>
