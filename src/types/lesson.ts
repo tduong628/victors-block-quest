@@ -38,3 +38,10 @@ export interface MasteryRecord {
   lastPlayedMs: number;
   lastCorrectMs: number | null;
 }
+
+export interface ArtworkRecord {
+  id?: number;               // Dexie autoincrement primary key
+  itemId: string;
+  dataUrl: string;
+  createdMs: number;
+}

@@ -1,16 +1,22 @@
 import Dexie, { type Table } from "dexie";
-import type { AttemptRecord, ActivityType, MasteryRecord } from "../types/lesson";
+import type { AttemptRecord, ActivityType, MasteryRecord, ArtworkRecord } from "../types/lesson";
 import { computeMasteryStatus } from "./mastery";
 
 class VictorQuestDB extends Dexie {
   attempts!: Table<AttemptRecord, number>;
   mastery!: Table<MasteryRecord, string>;
+  artwork!: Table<ArtworkRecord, number>;
 
   constructor() {
     super("victor-block-quest");
     this.version(1).stores({
       attempts: "++id, itemId, sessionId, timestampMs",
       mastery: "itemId, status, lastPlayedMs",
+    });
+    this.version(2).stores({
+      attempts: "++id, itemId, sessionId, timestampMs",
+      mastery: "itemId, status, lastPlayedMs",
+      artwork: "++id, itemId, createdMs",
     });
   }
 }
