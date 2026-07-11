@@ -24,7 +24,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,mp3,json}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,mp3,json,woff2}"],
         runtimeCaching: [
           {
             urlPattern: /\/audio\/.*\.mp3$/,

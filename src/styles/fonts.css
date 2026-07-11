@@ -1,0 +1,56 @@
+/*
+ * Self-hosted fonts for offline-first PWA use.
+ * Andika — early-literacy face for symbols/headings (single-story a, tailed g/l,
+ * disambiguated b/d/p/q and 0/O, 1/l).
+ * Lexend — reading-proficiency-optimized UI/body/dashboard face.
+ * Files live in /public/fonts and are added to the Workbox globPatterns in vite.config.ts
+ * so they are cached for offline use after PWA install.
+ */
+
+@font-face {
+  font-family: "Andika";
+  src: url("/fonts/Andika-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Andika";
+  src: url("/fonts/Andika-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("/fonts/Lexend-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("/fonts/Lexend-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("/fonts/Lexend-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lexend";
+  src: url("/fonts/Lexend-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
