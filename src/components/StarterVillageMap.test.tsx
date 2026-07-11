@@ -41,7 +41,12 @@ describe("StarterVillageMap", () => {
           expect(getComputedStyle(node).opacity).toBe("1");
         });
       },
-      { timeout: 2000, interval: 50 }
+      // 900ms is a deliberately tight deadline: the fixed entrance settles well under this
+      // (~500-600ms observed), but the pre-fix implementation (uncapped index * 0.05 delay
+      // stacked behind snapSpring's ~700-900ms settle time) could take up to ~1.5s for the
+      // last node, so this bound is what actually distinguishes fixed from broken — a looser
+      // timeout would pass against the old code too and prove nothing.
+      { timeout: 900, interval: 25 }
     );
   });
 

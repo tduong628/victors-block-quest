@@ -129,6 +129,11 @@ describe("getStaggerDelay", () => {
     expect(getStaggerDelay(50)).toBe(cappedAtSix);
     expect(getStaggerDelay(1000)).toBe(cappedAtSix);
   });
+
+  it("floors negative or invalid indexes at zero delay instead of going negative", () => {
+    expect(getStaggerDelay(-1)).toBe(0);
+    expect(getStaggerDelay(-1000)).toBe(0);
+  });
 });
 
 describe("getWrongAnswerCue", () => {

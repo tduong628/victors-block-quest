@@ -91,7 +91,7 @@ export const STAGGER_STEP_SEC = 0.03;
 const MAX_STAGGER_STEPS = 6;
 
 export function getStaggerDelay(index: number): number {
-  return Math.min(index, MAX_STAGGER_STEPS) * STAGGER_STEP_SEC;
+  return Math.min(Math.max(index, 0), MAX_STAGGER_STEPS) * STAGGER_STEP_SEC;
 }
 
 // Discover giant symbol snapping to full size (DESIGN_SPEC.md §5.2).
