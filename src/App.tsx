@@ -9,7 +9,7 @@ export default function App() {
   const [dashboardOpen, setDashboardOpen] = useState(false);
 
   return (
-    <div data-testid="app-shell" className="h-screen w-screen bg-slate-900 text-white">
+    <div data-testid="app-shell" className="h-screen w-screen bg-[var(--surface)] text-[var(--ink)] font-ui">
       {dashboardOpen ? (
         <ParentDashboard onClose={() => setDashboardOpen(false)} />
       ) : (
