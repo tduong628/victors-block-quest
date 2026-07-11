@@ -45,7 +45,7 @@ export default function ParentGate({ onUnlock, holdMs = 3000 }: ParentGateProps)
 
   if (question) {
     return (
-      <div data-surface="parent" className="flex h-full flex-col items-center justify-center gap-6 bg-pd-bg p-8 font-ui">
+      <div data-surface="parent" className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-pd-bg p-8 font-ui">
         <p data-testid="parent-math-question" className="font-ui text-2xl font-semibold tabular-nums text-pd-ink">
           {question.a} + {question.b} = ?
         </p>
