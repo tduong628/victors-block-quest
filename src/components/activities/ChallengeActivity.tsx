@@ -44,6 +44,13 @@ export default function ChallengeActivity({ item, allItems, sessionId, onComplet
         width: 800,
         height: 480,
         parent: containerRef.current,
+        scale: {
+          mode: Phaser.Scale.FIT,
+          autoCenter: Phaser.Scale.CENTER_BOTH,
+        },
+        input: {
+          activePointers: 1,
+        },
         scene: [ChallengeScene],
       });
 
@@ -68,6 +75,7 @@ export default function ChallengeActivity({ item, allItems, sessionId, onComplet
         <div
           ref={containerRef}
           data-testid="challenge-canvas-host"
+          style={{ touchAction: "none" }}
           className="overflow-hidden rounded-card"
         />
       </motion.div>
