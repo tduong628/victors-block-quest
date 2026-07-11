@@ -28,10 +28,11 @@ function CheckGlyph() {
 
 export default function CreateItActivity({ item, onComplete }: CreateItActivityProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isPaintingRef = useRef<boolean>(false);
   const [color, setColor] = useState(PALETTE[0]);
   const [collecting, setCollecting] = useState(false);
 
-  function handlePaint(e: React.MouseEvent<HTMLCanvasElement>) {
+  function handlePaint(e: React.PointerEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -78,8 +79,19 @@ export default function CreateItActivity({ item, onComplete }: CreateItActivityP
           data-testid="create-canvas"
           width={480}
           height={480}
-          onMouseDown={handlePaint}
-          onMouseMove={(e) => e.buttons === 1 && handlePaint(e)}
+          onPointerDown={(e) => {
+            isPaintingRef.current = true;
+            handlePaint(e);
+            e.currentTarget.setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => isPaintingRef.current && handlePaint(e)}
+          onPointerUp={() => {
+            isPaintingRef.current = false;
+          }}
+          onPointerLeave={() => {
+            isPaintingRef.current = false;
+          }}
+          style={{ touchAction: "none" }}
           className="rounded-card bg-surface-raised"
         />
       </motion.div>

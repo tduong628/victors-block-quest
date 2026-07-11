@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { beforeAll, describe, it, expect, vi } from "vitest";
 import CreateItActivity from "./CreateItActivity";
 import type { LessonItem } from "../../types/lesson";
 
@@ -12,6 +12,12 @@ const item: LessonItem = {
 };
 
 describe("CreateItActivity", () => {
+  beforeAll(() => {
+    if (!HTMLCanvasElement.prototype.setPointerCapture) {
+      HTMLCanvasElement.prototype.setPointerCapture = vi.fn();
+    }
+  });
+
   it("shows a color palette and a Save button, and calls onComplete after saving", async () => {
     const onComplete = vi.fn();
     render(<CreateItActivity item={item} onComplete={onComplete} />);
@@ -20,5 +26,19 @@ describe("CreateItActivity", () => {
     // handleSave awaits saveArtwork() before calling onComplete(), so the callback fires on a
     // microtask after the click — waitFor lets that resolve before asserting.
     await waitFor(() => expect(onComplete).toHaveBeenCalled());
+  });
+
+  it("handles pointer drawing interactions without crashing", () => {
+    const onComplete = vi.fn();
+    render(<CreateItActivity item={item} onComplete={onComplete} />);
+    const canvas = screen.getByTestId("create-canvas");
+
+    expect(() => {
+      fireEvent.pointerDown(canvas, { clientX: 24, clientY: 32, pointerId: 1 });
+      fireEvent.pointerMove(canvas, { clientX: 72, clientY: 88, pointerId: 1 });
+      fireEvent.pointerUp(canvas, { pointerId: 1 });
+    }).not.toThrow();
+
+    expect(canvas).toBeInTheDocument();
   });
 });
