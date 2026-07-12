@@ -3,6 +3,7 @@ import StarterVillageMap from "./components/StarterVillageMap";
 import ParentGate from "./components/ParentGate";
 import ParentDashboard from "./components/ParentDashboard";
 import { starterVillagePack } from "./data/lessonPacks/starter-village";
+import WorldCanvas from "./world/WorldCanvas";
 
 export default function App() {
   const sessionId = useMemo(() => crypto.randomUUID(), []);
@@ -14,7 +15,7 @@ export default function App() {
         <ParentDashboard onClose={() => setDashboardOpen(false)} />
       ) : (
         <>
-          <StarterVillageMap pack={starterVillagePack} sessionId={sessionId} />
+          <WorldCanvas sessionId={sessionId} />
           <ParentGate onUnlock={() => setDashboardOpen(true)} />
         </>
       )}
